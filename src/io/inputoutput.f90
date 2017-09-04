@@ -298,6 +298,7 @@ contains
       & amplitude1, &
       & rlaser_int_wcm2_1, &
       & pulse_tw1, &
+      & pulse_tw1_fs, &
       & omega1, &
       & epdir_re1, &
       & epdir_im1, &
@@ -306,11 +307,13 @@ contains
       & amplitude2, &
       & rlaser_int_wcm2_2, &
       & pulse_tw2, &
+      & pulse_tw2_fs, &
       & omega2, &
       & epdir_re2, &
       & epdir_im2, &
       & phi_cep2, &
       & t1_t2, &
+      & t1_t2_fs, &
       & quadrupole, &
       & quadrupole_pot, &
       & alocal_laser , &
@@ -534,19 +537,22 @@ contains
     amplitude1     = 0d0
     rlaser_int_wcm2_1 = -1d0
     pulse_tw1      = 0d0
+    pulse_tw1_fs      = 0d0
     omega1         = 0d0
     epdir_re1      = (/1d0,0d0,0d0/)
     epdir_im1      = 0d0
     phi_cep1       = 0d0
     ae_shape2      = 'none'
     amplitude2     = 0d0
-    rlaser_int_wcm2_2 = -1d0
+    rlaser_int_wcm2_2 = 0d0
     pulse_tw2      = 0d0
+    pulse_tw2_fs      = 0d0
     omega2         = 0d0
     epdir_re2      = (/1d0,0d0,0d0/)
     epdir_im2      = 0d0
     phi_cep2       = 0d0
     t1_t2          = 0d0
+    t1_t2_fs          = 0d0
     quadrupole     = 'n'
     quadrupole_pot = ''
     alocal_laser    = 'n'
@@ -810,6 +816,9 @@ contains
     call comm_bcast(rlaser_int_wcm2_1,nproc_group_global)
     call comm_bcast(pulse_tw1  ,nproc_group_global)
     pulse_tw1 = pulse_tw1 * utime_to_au
+    call comm_bcast(pulse_tw1_fs  ,nproc_group_global)
+    if(pulse_tw1_fs*pulse_tw1 /= 0d0)stop "error pulse_tw1(_fs)"
+    if(pulse_tw1_fs /= 0d0)pulse_tw1 = pulse_tw1_fs/au_time_fs 
     call comm_bcast(omega1,nproc_group_global)
     omega1 = omega1 * uenergy_to_au
     call comm_bcast(epdir_re1 ,nproc_group_global)
@@ -821,6 +830,9 @@ contains
     call comm_bcast(rlaser_int_wcm2_2,nproc_group_global)
     call comm_bcast(pulse_tw2  ,nproc_group_global)
     pulse_tw2 = pulse_tw2 * utime_to_au
+    call comm_bcast(pulse_tw2_fs  ,nproc_group_global)
+    if(pulse_tw2_fs*pulse_tw2 /= 0d0)stop "error pulse_tw2(_fs)"
+    if(pulse_tw2_fs /= 0d0)pulse_tw2 = pulse_tw2_fs/au_time_fs 
     call comm_bcast(omega2,nproc_group_global)
     omega2 = omega2 * uenergy_to_au
     call comm_bcast(epdir_re2,nproc_group_global)
@@ -828,6 +840,9 @@ contains
     call comm_bcast(phi_cep2 ,nproc_group_global)
     call comm_bcast(t1_t2    ,nproc_group_global)
     t1_t2 = t1_t2 * utime_to_au
+    if(t1_t2 /= 0d0)stop "error t1_t2"
+    call comm_bcast(t1_t2_fs    ,nproc_group_global)
+    t1_t2 = t1_t2_fs/au_time_fs 
     call comm_bcast(quadrupole    ,nproc_group_global)
     call comm_bcast(quadrupole_pot,nproc_group_global)
     call comm_bcast(alocal_laser  ,nproc_group_global)

@@ -136,6 +136,7 @@ module salmon_global
   real(8)        :: amplitude1
   real(8)        :: rlaser_int_wcm2_1
   real(8)        :: pulse_tw1
+  real(8)        :: pulse_tw1_fs
   real(8)        :: omega1
   real(8)        :: epdir_re1(3)
   real(8)        :: epdir_im1(3)
@@ -144,11 +145,13 @@ module salmon_global
   real(8)        :: amplitude2
   real(8)        :: rlaser_int_wcm2_2
   real(8)        :: pulse_tw2
+  real(8)        :: pulse_tw2_fs
   real(8)        :: omega2
   real(8)        :: epdir_re2(3)
   real(8)        :: epdir_im2(3)
   real(8)        :: phi_cep2
   real(8)        :: t1_t2
+  real(8)        :: t1_t2_fs
   character(1)   :: quadrupole
   character(8)   :: quadrupole_pot
   character(1)   :: alocal_laser
