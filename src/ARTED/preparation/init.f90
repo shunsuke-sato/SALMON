@@ -328,6 +328,15 @@ subroutine init_uniform_k_grid()
     enddo
   end select
   kAc0=kAc  ! Store initial k-point coordinates
+
+  if(AE_shape1 == 'impulse')then
+     kAc0(:,1) = kAc0(:,1) - epdir_re1(1)*e_impulse
+     kAc0(:,2) = kAc0(:,2) - epdir_re1(2)*e_impulse
+     kAc0(:,3) = kAc0(:,3) - epdir_re1(3)*e_impulse
+     kAc = kAc0
+  end if
+
+
 end subroutine
 
 
