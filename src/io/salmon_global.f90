@@ -95,6 +95,7 @@ module salmon_global
 !! &functional
   character(32)  :: xc
   real(8)        :: cval
+  character(1)   :: freeze_hxc
 
 !! &rgrid
   real(8)        :: dl(3)

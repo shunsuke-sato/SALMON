@@ -256,7 +256,8 @@ contains
 
     namelist/functional/ &
       & xc, &
-      & cval
+      & cval, &
+      & freeze_hxc
 
     namelist/rgrid/ &
       & dl, &
@@ -502,6 +503,7 @@ contains
 !! == default for &functional
     xc   = 'PZ'
     cval = -1d0
+    freeze_hxc = 'n'
 !! == default for &rgrid
     dl        = 0d0
     num_rgrid = 0
@@ -774,6 +776,7 @@ contains
 !! == bcast for &functional
     call comm_bcast(xc  ,nproc_group_global)
     call comm_bcast(cval,nproc_group_global)
+    call comm_bcast(freeze_hxc ,nproc_group_global)
 !! == bcast for &rgrid
     call comm_bcast(dl,nproc_group_global)
     dl = dl * ulength_to_au
@@ -1260,6 +1263,7 @@ contains
       write(fh_variables_log, '("#namelist: ",A,", status=",I3)') 'functional', inml_functional
       write(fh_variables_log, '("#",4X,A,"=",A)') 'xc', trim(xc)
       write(fh_variables_log, '("#",4X,A,"=",ES12.5)') 'cval', cval
+      write(fh_variables_log, '("#",4X,A,"=",A)') 'freeze_hxc', trim(freeze_hxc)
 
       if(inml_rgrid >0)ierr_nml = ierr_nml +1
       write(fh_variables_log, '("#namelist: ",A,", status=",I3)') 'rgrid', inml_rgrid

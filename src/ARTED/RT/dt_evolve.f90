@@ -155,6 +155,7 @@ Subroutine dt_evolve_omp_KB(zu)
   NVTX_END()
 
 ! yabana
+  if(freeze_hxc /= 'y')then
   select case(functional)
   case('VS98','TPSS','TBmBJ','BJ_PW')
 !$acc update self(zu, ekr_omp, vloc)
@@ -202,23 +203,25 @@ Subroutine dt_evolve_omp_KB(zu)
 !$acc update device(zu, vloc)
   end select
 ! yabana
+  end if
 
   NVTX_BEG('dt_evolve_omp_KB(): hamiltonian',3)
   call hamiltonian(zu,.true.)
   NVTX_END()
 
-  NVTX_BEG('dt_evolve_omp_KB(): psi_rho_RT',4)
-  call psi_rho_RT(zu)
-  NVTX_END()
+  if(freeze_hxc /= 'y')then
+    NVTX_BEG('dt_evolve_omp_KB(): psi_rho_RT',4)
+    call psi_rho_RT(zu)
+    NVTX_END()
 
-  NVTX_BEG('dt_evolve_omp_KB(): Hartree',5)
-  call Hartree
-  NVTX_END()
+    NVTX_BEG('dt_evolve_omp_KB(): Hartree',5)
+    call Hartree
+    NVTX_END()
 
 ! yabana
-  NVTX_BEG('dt_evolve_omp_KB(): Exc_Cor',6)
-  call Exc_Cor(calc_mode_rt,NBoccmax,zu)
-  NVTX_END()
+    NVTX_BEG('dt_evolve_omp_KB(): Exc_Cor',6)
+    call Exc_Cor(calc_mode_rt,NBoccmax,zu)
+    NVTX_END()
 ! yabana
 
 
@@ -227,9 +230,11 @@ Subroutine dt_evolve_omp_KB(zu)
 #else
 !$omp parallel do
 #endif
-  do i=1,NL
-    Vloc(i)=Vh(i)+Vpsl(i)+Vexc(i)
-  end do
+    do i=1,NL
+      Vloc(i)=Vh(i)+Vpsl(i)+Vexc(i)
+    end do
+
+  end if
 !$acc end kernels
 
 !$acc end data
@@ -296,12 +301,13 @@ Subroutine dt_evolve_etrs_omp_KB(zu)
   call hamiltonian(zu,.false.)
   NVTX_END()
 
-
-  Vloc_t=Vloc
-  Vloc_new(:) = 3d0*Vloc(:) - 3d0*Vloc_old(:,1) + Vloc_old(:,2)
-  Vloc_old(:,2) = Vloc_old(:,1)
-  Vloc_old(:,1) = Vloc(:)
-  Vloc(:) = Vloc_new(:)
+  if(freeze_hxc /= 'y')then
+    Vloc_t=Vloc
+    Vloc_new(:) = 3d0*Vloc(:) - 3d0*Vloc_old(:,1) + Vloc_old(:,2)
+    Vloc_old(:,2) = Vloc_old(:,1)
+    Vloc_old(:,1) = Vloc(:)
+    Vloc(:) = Vloc_new(:)
+  end if
 
   kAc=kAc_new
 !$acc update device(kAc)
@@ -335,6 +341,7 @@ Subroutine dt_evolve_etrs_omp_KB(zu)
   NVTX_END()
 
 !== predictor-corrector ==
+  if(freeze_hxc /= 'y')then
   select case(functional)
   case('VS98','TPSS','TBmBJ','BJ_PW')
 !$acc update self(zu, ekr_omp, vloc)
@@ -379,23 +386,24 @@ Subroutine dt_evolve_etrs_omp_KB(zu)
      end do
 
   end select
-
+  end if
 
   NVTX_BEG('dt_evolve_omp_KB(): hamiltonian',3)
   call hamiltonian(zu,.true.)
   NVTX_END()
 
-  NVTX_BEG('dt_evolve_omp_KB(): psi_rho_RT',4)
-  call psi_rho_RT(zu)
-  NVTX_END()
+  if(freeze_hxc /= 'y')then
+    NVTX_BEG('dt_evolve_omp_KB(): psi_rho_RT',4)
+    call psi_rho_RT(zu)
+    NVTX_END()
 
-  NVTX_BEG('dt_evolve_omp_KB(): Hartree',5)
-  call Hartree
-  NVTX_END()
+    NVTX_BEG('dt_evolve_omp_KB(): Hartree',5)
+    call Hartree
+    NVTX_END()
 
-  NVTX_BEG('dt_evolve_omp_KB(): Exc_Cor',6)
-  call Exc_Cor(calc_mode_rt,NBoccmax,zu)
-  NVTX_END()
+    NVTX_BEG('dt_evolve_omp_KB(): Exc_Cor',6)
+    call Exc_Cor(calc_mode_rt,NBoccmax,zu)
+    NVTX_END()
 
 
 #ifdef _OPENACC
@@ -403,9 +411,13 @@ Subroutine dt_evolve_etrs_omp_KB(zu)
 #else
 !$omp parallel do
 #endif
-  do i=1,NL
-    Vloc(i)=Vh(i)+Vpsl(i)+Vexc(i)
-  end do
+    do i=1,NL
+      Vloc(i)=Vh(i)+Vpsl(i)+Vexc(i)
+    end do
+
+  end if
+
+
 !$acc end kernels
 
 !$acc end data
