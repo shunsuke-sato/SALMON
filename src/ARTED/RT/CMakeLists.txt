@@ -3,15 +3,16 @@ set(SOURCES
     current.f90
     init_Ac.f90
     Fourier_tr.f90
+    hamiltonian.f90
     )
 
 set(SOURCES_ACC
     acc/current.f90
-    acc/hamiltonian.f90
+    acc/hamiltonian_Taylor.f90
     )
 
 set(SOURCES_OMP
-    hamiltonian.f90
+    hamiltonian_Taylor.f90
     )
 
 if (ENABLE_OPENACC)
