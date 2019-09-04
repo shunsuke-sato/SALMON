@@ -20,11 +20,14 @@ subroutine hamiltonian(zu,flag_current)
   complex(8), intent(inout) :: zu(NL,NBoccmax,NK_s:NK_e)
   logical, intent(in)       :: flag_current
   integer, parameter :: ID_PROPAGATOR_TAYLOR = 1
+  integer, parameter :: ID_PROPAGATOR_LANCZOS = 2
   integer, parameter :: ID_PROPAGATOR = ID_PROPAGATOR_TAYLOR
 
   select case(ID_PROPAGATOR)
   case(ID_PROPAGATOR_TAYLOR)
     call hamiltonian_Taylor(zu,flag_current)
+  case(ID_PROPAGATOR_LANCZOS)
+    call hamiltonian_Lanczos(zu,flag_current)
   case default
     call err_finalize('invalid propagator')
   end select
