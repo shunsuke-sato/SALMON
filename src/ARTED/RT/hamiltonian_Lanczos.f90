@@ -56,8 +56,8 @@ subroutine hamiltonian_Lanczos(zu,flag_current)
 #endif
 
   lwork=6*ndim_Lanczos**2
-  allocate(work_lp(lwork,,0:NUMBER_THREADS-1))
-  allocate(rwork(3*ndim_Lanczos-2,,0:NUMBER_THREADS-1))
+  allocate(work_lp(lwork,0:NUMBER_THREADS-1))
+  allocate(rwork(3*ndim_Lanczos-2,0:NUMBER_THREADS-1))
   allocate(w(ndim_Lanczos,0:NUMBER_THREADS-1))
 
   call timer_begin(LOG_HPSI)
@@ -90,7 +90,7 @@ subroutine hamiltonian_Lanczos(zu,flag_current)
     end do
 
     ham_L(:,:,tid) = 0d0
-    ham_L(1,1,tid) = alpha_L(1,1,tid)
+    ham_L(1,1,tid) = alpha_L(1,tid)
     do j = 2, ndim_Lanczos
       ham_L(j,j,tid) = alpha_L(j,tid)
       ham_L(j,j-1,tid) = beta_L(j,tid)

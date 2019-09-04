@@ -9,10 +9,12 @@ set(SOURCES
 set(SOURCES_ACC
     acc/current.f90
     acc/hamiltonian_Taylor.f90
+    acc/hamiltonian_Lanczos.f90
     )
 
 set(SOURCES_OMP
     hamiltonian_Taylor.f90
+    hamiltonian_Lanczos.f90
     )
 
 if (ENABLE_OPENACC)

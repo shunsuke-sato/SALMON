@@ -21,7 +21,7 @@ subroutine hamiltonian(zu,flag_current)
   logical, intent(in)       :: flag_current
   integer, parameter :: ID_PROPAGATOR_TAYLOR = 1
   integer, parameter :: ID_PROPAGATOR_LANCZOS = 2
-  integer, parameter :: ID_PROPAGATOR = ID_PROPAGATOR_TAYLOR
+  integer, parameter :: ID_PROPAGATOR = ID_PROPAGATOR_LANCZOS
 
   select case(ID_PROPAGATOR)
   case(ID_PROPAGATOR_TAYLOR)
